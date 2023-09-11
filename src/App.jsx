@@ -1,35 +1,57 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect } from "react";
+import "./App.css";
+import { useDispatch, useSelector } from "react-redux";
+import { getData, incrementSlider, decrementSlider } from "./slice";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const dispatch = useDispatch();
+  const init = useSelector((state) => {
+    return state.slider;
+  });
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+  useEffect(() => {
+    dispatch(getData(init.page));
+  }, [init.page]);
+
+  if (!init.isLoading) return <h3>Loading...</h3>;
+  else {
+    return (
+      <>
+        <h1>Redux image slider</h1>
+        <div className="container-fluid">
+          <div className="maindiv">
+            <div className="slider">
+              <div className="slider-wrapper">
+                <div className="left">
+                  <img src={init.product.image} alt="Product Image" />
+                </div>
+                <div className="right">
+                  
+                  
+                 
+                  
+                  <p>{init.product.description}</p>
+                  <p>{init.product.price}</p>
+                </div>
+              </div>
+              <div className="navigation">
+                <button
+                  onClick={() => dispatch(decrementSlider())}
+                  disabled={init.page === 1 ? true : false}>
+                  Prev
+                </button>
+                <button
+                  onClick={() => dispatch(incrementSlider())}
+                  disabled={init.page === 19 ? true : false}>
+                  Next
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  }
 }
 
-export default App
+export default App;

@@ -1,10 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
-import ecommerceReducer from "./Slice"
+import sliderReducer from './slice'
 
-const store = configureStore({
-    reducers :{
-        ecommerce : ecommerceReducer
+export default configureStore({
+    reducer: {
+        slider: sliderReducer
     }
 })
-
-export default store
